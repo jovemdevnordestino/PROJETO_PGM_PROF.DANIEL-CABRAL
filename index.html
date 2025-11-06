@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio Educacional - Geek Rubi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS para o Design Moderno e Interativo com Tema Educacional */
+
+        /* ------------------- ESTILOS GLOBAIS ------------------- */
+        :root {
+            --cor-fundo-principal: #0d0d1a;
+            --cor-destaque-academia: #00eaff; /* Ciano/Azul Elétrico - Tema Tech/Educação */
+            --cor-texto: #e0e0e0;
+            --cor-sombra: rgba(0, 234, 255, 0.7);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, var(--cor-fundo-principal) 0%, #1a1a33 100%);
+            font-family: 'Orbitron', sans-serif; 
+            color: var(--cor-texto);
+            transition: background-color 0.5s ease;
+            padding: 20px; 
+            box-sizing: border-box; 
+        }
+
+        /* ------------------- TÍTULO ------------------- */
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: var(--cor-destaque-academia);
+            text-shadow: 0 0 10px var(--cor-sombra);
+            transition: transform 0.3s ease;
+        }
+
+        h1:hover {
+            transform: scale(1.02);
+        }
+
+        /* ------------------- CONTAINER DO PLAYER ------------------- */
+        .video-container {
+            width: 98%;
+            max-width: 1400px;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            border-radius: 12px; 
+            overflow: hidden;
+            border: 3px solid var(--cor-destaque-academia); 
+            box-shadow: 0 0 25px var(--cor-sombra), 0 0 5px rgba(0, 0, 0, 0.9);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .video-container:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 5px 35px var(--cor-sombra), 0 0 10px var(--cor-destaque-academia);
+        }
+
+        .video-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* ------------------- NOTA DE INSTRUÇÃO ------------------- */
+        .nota-container {
+            background-color: #33334d;
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--cor-destaque-academia); 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            max-width: 700px;
+            text-align: left;
+            opacity: 0.9;
+        }
+
+        .nota-container:hover {
+            opacity: 1;
+        }
+
+        .nota-container p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        
+        .instrucao {
+            color: #4CAF50; /* Verde para instrução */
+            font-weight: bold;
+        }
+
+        /* --- OVERLAY DE INSTRUÇÃO (Totalmente Desativado) --- */
+        .overlay-container {
+            display: none !important; 
+        }
+        
+        .content-hidden { display: none; }
+    </style>
+</head>
+<body>
+
+        <div id="mainContent"> 
+        <h1>🎓 Projeto PGM - Professor Daniel Turma 2°B</h1>
+
+        <div class="video-container">
+            <iframe
+                id="videoPlayer"
+                class="video-frame"
+                src="" 
+                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="nota-container">
+            <p class="instrucao">
+                👉 descricaooooooo
+            </p>
+            <hr style="border-color: #555;">
+            <p>
+                *Descricaoooo
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoFrame = document.getElementById('videoPlayer');
+            
+            // --- 1. CONFIGURAÇÃO DE VÍDEOS ---
+            const videoData = [
+                // Mude a duração (em segundos) aqui!
+                { url: 'https://drive.google.com/file/d/1CH-LCqNn-PVRGO-IXOOPlpV07uJiWtVX/preview', duration: 30 }, 
+                { url: 'https://drive.google.com/file/d/1vDqlQwIElqYUAcS8iOlzVIrMxIGvugsK/preview', duration: 30 } 
+            ];
+
+            let currentVideoIndex = 0;
+
+            // --- FUNÇÕES DE CONTROLE ---
+
+            function loadNextVideo() {
+                const data = videoData[currentVideoIndex];
+                videoFrame.src = data.url;
+                currentVideoIndex = (currentVideoIndex + 1) % videoData.length;
+
+                const nextDelayMs = data.duration * 1000;
+                setTimeout(loadNextVideo, nextDelayMs);
+            }
+
+            // INÍCIO IMEDIATO: Inicia a troca de vídeos assim que a página carrega.
+            loadNextVideo(); 
+            
+        });
+    </script>
+
+</body>
+</html>
