@@ -14,12 +14,13 @@
             --cor-destaque-academia: #00eaff; /* Ciano/Azul Elétrico - Tema Tech/Educação */
             --cor-texto: #e0e0e0;
             --cor-sombra: rgba(0, 234, 255, 0.7);
+            --cor-g1-vermelho: #ff0000; /* Vermelho forte como no logo do G1 */
         }
 
         body {
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Altera para começar do topo */
             align-items: center;
             min-height: 100vh;
             margin: 0;
@@ -27,7 +28,7 @@
             font-family: 'Orbitron', sans-serif; 
             color: var(--cor-texto);
             transition: background-color 0.5s ease;
-            padding: 20px; 
+            padding: 20px 0; /* Ajusta o padding para melhor visualização */
             box-sizing: border-box; 
         }
 
@@ -46,7 +47,16 @@
             transform: scale(1.02);
         }
 
-        /* ------------------- CONTAINER DO PLAYER ------------------- */
+        /* ------------------- CONTAINER PRINCIPAL ------------------- */
+        #mainContent {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ------------------- PLAYER PRINCIPAL ------------------- */
         .video-container {
             width: 98%;
             max-width: 1400px;
@@ -57,6 +67,8 @@
             border: 3px solid var(--cor-destaque-academia); 
             box-shadow: 0 0 25px var(--cor-sombra), 0 0 5px rgba(0, 0, 0, 0.9);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
+            cursor: pointer;
+            margin-bottom: 30px;
         }
 
         .video-container:hover {
@@ -64,11 +76,161 @@
             box-shadow: 0 5px 35px var(--cor-sombra), 0 0 10px var(--cor-destaque-academia);
         }
 
+        /* Estilo da Imagem de Capa (Simula a miniatura do G1) */
+        .video-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            transition: opacity 0.5s ease;
+        }
+
+        .loaded .video-thumbnail {
+            opacity: 0; 
+            pointer-events: none;
+        }
+
+        /* Botão de Play Estilizado (Imita o G1/YouTube) */
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            border: 3px solid white;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .play-button::before {
+            content: '';
+            border-style: solid;
+            border-width: 18px 0 18px 28px;
+            border-color: transparent transparent transparent var(--cor-g1-vermelho);
+            margin-left: 8px;
+        }
+
+        .play-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+        
+        .loaded .play-button {
+            display: none;
+        }
+
+
         .video-frame {
             width: 100%;
             height: 100%;
             border: none;
             display: block;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loaded .video-frame {
+            opacity: 1;
+        }
+
+
+        /* ------------------- GALERIA HORIZONTAL (CARROSSEL) ------------------- */
+
+        .horizontal-scroll-container {
+            width: 100%;
+            padding: 20px 0; /* Padding superior e inferior */
+            margin: 20px 0;
+            background-color: #1a1a33; /* Fundo levemente diferente */
+            border-top: 2px solid var(--cor-destaque-academia);
+            border-bottom: 2px solid var(--cor-destaque-academia);
+            box-shadow: inset 0 0 10px rgba(0, 234, 255, 0.1);
+        }
+
+        .video-carousel {
+            display: flex;
+            overflow-x: auto; /* Permite a rolagem horizontal */
+            scroll-snap-type: x mandatory; /* Melhora a experiência de rolagem */
+            gap: 20px;
+            padding: 10px 20px; /* Padding interno para os lados */
+            /* Esconde a barra de rolagem para navegadores baseados em WebKit (Chrome, Safari) */
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            /* Esconde a barra de rolagem para IE, Edge e Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .carousel-item {
+            flex: 0 0 280px; /* Largura fixa para cada item */
+            height: 157.5px; /* Altura 9/16 de 280px */
+            aspect-ratio: 16 / 9;
+            scroll-snap-align: start;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #333;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .carousel-item:hover {
+            transform: scale(1.05);
+            border-color: var(--cor-g1-vermelho);
+            box-shadow: 0 0 15px var(--cor-g1-vermelho);
+        }
+
+        .carousel-item-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-item-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--cor-texto);
+            padding: 5px;
+            font-size: 0.8em;
+            text-align: center;
+            font-weight: 400;
+        }
+        
+        .carousel-play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 5;
+            transition: background-color 0.3s;
+        }
+
+        .carousel-play-icon::before {
+            content: '';
+            border-style: solid;
+            border-width: 8px 0 8px 12px;
+            border-color: transparent transparent transparent var(--cor-g1-vermelho);
+            margin-left: 3px;
         }
 
         /* ------------------- NOTA DE INSTRUÇÃO ------------------- */
@@ -85,83 +247,130 @@
             opacity: 0.9;
         }
 
-        .nota-container:hover {
-            opacity: 1;
-        }
-
-        .nota-container p {
-            margin: 5px 0;
-            line-height: 1.5;
-        }
-        
         .instrucao {
-            color: #4CAF50; /* Verde para instrução */
+            color: #4CAF50; 
             font-weight: bold;
         }
 
-        /* --- OVERLAY DE INSTRUÇÃO (Totalmente Desativado) --- */
-        .overlay-container {
-            display: none !important; 
-        }
-        
-        .content-hidden { display: none; }
     </style>
 </head>
 <body>
 
-        <div id="mainContent"> 
+    <div id="mainContent"> 
         <h1>Trying out possibilities in English language"</h1>
 
-        <div class="video-container">
-            <iframe
-                id="videoPlayer"
-                class="video-frame"
-                src="" 
-                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
+        <div class="video-container" id="videoContainer">
+            <img 
+                src="https://via.placeholder.com/1400x788?text=Clique+para+Iniciar+o+V%C3%ADdeo+Principal" 
+                alt="Capa do Vídeo" 
+                class="video-thumbnail" 
+                id="videoThumbnail"
+            >
+            <div class="play-button" id="playButton"></div>
+            <iframe
+                id="videoPlayer"
+                class="video-frame"
+                src="" 
+                allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
 
-        <div class="nota-container">
-            <p class="instrucao">
-                Introducing myself? - Who am I?
-            </p>
-          
-        </div>
-    </div>
+        <div class="horizontal-scroll-container">
+            <div class="video-carousel" id="videoCarousel">
+                
+                </div>
+        </div>
+        <div class="nota-container">
+            <p class="instrucao">
+                Introducing myself? - Who am I?
+            </p>
+        </div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const videoFrame = document.getElementById('videoPlayer');
-            
-            // --- 1. CONFIGURAÇÃO DE VÍDEOS ---
-            const videoData = [
-                // Mude a duração (em segundos) aqui!
-                { url: 'https://drive.google.com/file/d/1CH-LCqNn-PVRGO-IXOOPlpV07uJiWtVX/preview', duration: 30 }, 
-                { url: 'https://drive.google.com/file/d/1vDqlQwIElqYUAcS8iOlzVIrMxIGvugsK/preview', duration: 30 } 
-            ];
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoContainer = document.getElementById('videoContainer');
+            const videoFrame = document.getElementById('videoPlayer');
+            const videoCarousel = document.getElementById('videoCarousel');
+            const mainVideoThumbnail = document.getElementById('videoThumbnail');
 
-            let currentVideoIndex = 0;
+            // --- 1. CONFIGURAÇÃO DE VÍDEOS (Agora com TODOS os seus links) ---
+            const allVideoLinks = [
+                // FORMATO: { url: 'SEU_LINK', title: 'TÍTULO DO VÍDEO', thumb: 'LINK_DA_SUA_MINIATURA' }
+                { url: 'https://drive.google.com/file/d/1PRhwur2RIzFdWA_5f3L_7MqsUuNBwV2j/preview', title: 'O que é Ser? | M2', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+2' },
+                { url: 'https://drive.google.com/file/d/1QkNEI-WTLXOd9L8k2ROu0Lj9ACVpbMUS/preview', title: 'Filosofia Prática', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+3' },
+                { url: 'https://drive.google.com/file/d/1UgICM7uD86oYeRnjgb8i4YnpjOt-TNKY/preview', title: 'Desafios Atuais', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+4' },
+                { url: 'https://drive.google.com/file/d/1w3DUhc3-EW6NZdTGbw7JdPiHsjgf62w9/preview', title: 'Criatividade e Inovação', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+5' },
+                { url: 'https://drive.google.com/file/d/1rDkhTc9CUV68uuKpEsIkGwS1_QpakfYg/preview', title: 'O Futuro é Agora', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+6' },
+                { url: 'https://drive.google.com/file/d/1xVRrJsKmsIbv0uVKxntWc3eZDzsaz3Cy/preview', title: 'Mindset Vencedor', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+7' },
+                { url: 'https://drive.google.com/file/d/1ABBNt5bGv5dE-1_qwSv5AgNw-3wqUYr6/preview', title: 'A Chave do Sucesso', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+8' },
+                { url: 'https://drive.google.com/file/d/1JveGOFU8_dNCWo9_YUsKKhfGEFj_ab7A/preview', title: 'Liderança e Ética', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+9' },
+                { url: 'https://drive.google.com/file/d/1GEzj4xh6mXsX-z_bJ5nNq1zzbRmqh4EM/preview', title: 'Tech e Sociedade', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+10' },
+                { url: 'https://drive.google.com/file/d/1GKaVh7D0H0cw6uyAFQYxGrEpJSLWBEfU/preview', title: 'Motivação Pessoal', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+11' },
+                { url: 'https://drive.google.com/file/d/134IcjBt0aYOZZ-QX_D9IQVd0E0c5eSyP/preview', title: 'Encerramento', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+12' },
+                // Adicione mais links aqui se necessário, mantendo o formato.
+            ];
 
-            // --- FUNÇÕES DE CONTROLE ---
+            let currentVideoUrl = allVideoLinks[0].url; // Define o primeiro vídeo como inicial
 
-            function loadNextVideo() {
-                const data = videoData[currentVideoIndex];
-                videoFrame.src = data.url;
-                currentVideoIndex = (currentVideoIndex + 1) % videoData.length;
+            // --- FUNÇÃO PARA RENDERIZAR O CARROSSEL ---
+            function renderCarousel() {
+                allVideoLinks.forEach(video => {
+                    const item = document.createElement('div');
+                    item.className = 'carousel-item';
+                    item.setAttribute('data-video-url', video.url);
 
-                const nextDelayMs = data.duration * 1000;
-                setTimeout(loadNextVideo, nextDelayMs);
-            }
+                    item.innerHTML = `
+                        <img src="${video.thumb}" alt="${video.title}" class="carousel-item-thumbnail">
+                        <div class="carousel-play-icon"></div>
+                        <div class="carousel-item-title">${video.title}</div>
+                    `;
 
-            // INÍCIO IMEDIATO: Inicia a troca de vídeos assim que a página carrega.
-            loadNextVideo(); 
-            
-        });
-    </script>
+                    // Adiciona o evento de clique para mudar o player principal
+                    item.addEventListener('click', () => {
+                        loadMainPlayer(video.url, video.thumb);
+                    });
+
+                    videoCarousel.appendChild(item);
+                });
+            }
+            
+            // --- FUNÇÃO PARA CARREGAR O PLAYER PRINCIPAL ---
+            function loadMainPlayer(url, thumbUrl) {
+                // 1. Resetar o estado do player principal (volta para a capa)
+                videoContainer.classList.remove('loaded');
+                mainVideoThumbnail.src = thumbUrl;
+                currentVideoUrl = url;
+                
+                // 2. Limpar o src do iframe (para evitar pré-carregamento)
+                videoFrame.src = "";
+            }
+
+            // --- FUNÇÃO DE CARREGAMENTO NO CLIQUE DO PLAYER PRINCIPAL ---
+            function handleMainPlayClick() {
+                // Se o iframe não tiver o src (porque foi resetado ou está inicial)
+                if (videoFrame.src === "" || !videoFrame.src.includes(currentVideoUrl)) {
+                    // 1. Carrega o vídeo atual no iframe
+                    videoFrame.src = currentVideoUrl;
+                }
+
+                // 2. Adiciona a classe 'loaded' para iniciar a reprodução
+                videoContainer.classList.add('loaded');
+            }
+
+            // --- INÍCIO ---
+            // 1. Inicializa o carrossel
+            renderCarousel();
+            
+            // 2. Configura o player principal com o primeiro item
+            loadMainPlayer(allVideoLinks[0].url, allVideoLinks[0].thumb);
+
+            // 3. Adiciona o evento de clique para o player principal (botão/capa)
+            videoContainer.addEventListener('click', handleMainPlayClick);
+        });
+    </script>
 
 </body>
 
 </html>
-
-
