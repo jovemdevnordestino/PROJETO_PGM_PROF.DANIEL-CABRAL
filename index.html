@@ -196,18 +196,11 @@
             object-fit: cover;
         }
 
+        /* ------------------- MUDANÇA: Oculta o Título ------------------- */
         .carousel-item-title {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            color: var(--cor-texto);
-            padding: 5px;
-            font-size: 0.8em;
-            text-align: center;
-            font-weight: 400;
+            display: none; /* A linha que remove o título da visualização */
         }
+        /* ---------------------------------------------------------------- */
         
         .carousel-play-icon {
             position: absolute;
@@ -295,20 +288,21 @@
             const videoCarousel = document.getElementById('videoCarousel');
             const mainVideoThumbnail = document.getElementById('videoThumbnail');
 
-            // --- 1. CONFIGURAÇÃO DE VÍDEOS (Agora com TODOS os seus links) ---
+            // --- 1. CONFIGURAÇÃO DE VÍDEOS (Lista mantida para as URLs, mas o "title" não será usado na renderização) ---
             const allVideoLinks = [
                 // FORMATO: { url: 'SEU_LINK', title: 'TÍTULO DO VÍDEO', thumb: 'LINK_DA_SUA_MINIATURA' }
-                { url: 'https://drive.google.com/file/d/1PRhwur2RIzFdWA_5f3L_7MqsUuNBwV2j/preview', title: 'O que é Ser? | M2', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+2' },
-                { url: 'https://drive.google.com/file/d/1QkNEI-WTLXOd9L8k2ROu0Lj9ACVpbMUS/preview', title: 'Filosofia Prática', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+3' },
-                { url: 'https://drive.google.com/file/d/1UgICM7uD86oYeRnjgb8i4YnpjOt-TNKY/preview', title: 'Desafios Atuais', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+4' },
-                { url: 'https://drive.google.com/file/d/1w3DUhc3-EW6NZdTGbw7JdPiHsjgf62w9/preview', title: 'Criatividade e Inovação', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+5' },
-                { url: 'https://drive.google.com/file/d/1rDkhTc9CUV68uuKpEsIkGwS1_QpakfYg/preview', title: 'O Futuro é Agora', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+6' },
-                { url: 'https://drive.google.com/file/d/1xVRrJsKmsIbv0uVKxntWc3eZDzsaz3Cy/preview', title: 'Mindset Vencedor', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+7' },
-                { url: 'https://drive.google.com/file/d/1ABBNt5bGv5dE-1_qwSv5AgNw-3wqUYr6/preview', title: 'A Chave do Sucesso', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+8' },
-                { url: 'https://drive.google.com/file/d/1JveGOFU8_dNCWo9_YUsKKhfGEFj_ab7A/preview', title: 'Liderança e Ética', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+9' },
-                { url: 'https://drive.google.com/file/d/1GEzj4xh6mXsX-z_bJ5nNq1zzbRmqh4EM/preview', title: 'Tech e Sociedade', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+10' },
-                { url: 'https://drive.google.com/file/d/1GKaVh7D0H0cw6uyAFQYxGrEpJSLWBEfU/preview', title: 'Motivação Pessoal', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+11' },
-                { url: 'https://drive.google.com/file/d/134IcjBt0aYOZZ-QX_D9IQVd0E0c5eSyP/preview', title: 'Encerramento', thumb: 'https://via.placeholder.com/280x157?text=VIDEO+12' },
+               
+                { url: 'https://drive.google.com/file/d/1PRhwur2RIzFdWA_5f3L_7MqsUuNBwV2j/preview', },
+                { url: 'https://drive.google.com/file/d/1QkNEI-WTLXOd9L8k2ROu0Lj9ACVpbMUS/preview', },
+                { url: 'https://drive.google.com/file/d/1UgICM7uD86oYeRnjgb8i4YnpjOt-TNKY/preview', },
+                { url: 'https://drive.google.com/file/d/1w3DUhc3-EW6NZdTGbw7JdPiHsjgf62w9/preview',  },
+                { url: 'https://drive.google.com/file/d/1rDkhTc9CUV68uuKpEsIkGwS1_QpakfYg/preview', },
+                { url: 'https://drive.google.com/file/d/1xVRrJsKmsIbv0uVKxntWc3eZDzsaz3Cy/preview', },
+                { url: 'https://drive.google.com/file/d/1ABBNt5bGv5dE-1_qwSv5AgNw-3wqUYr6/preview',  },
+                { url: 'https://drive.google.com/file/d/1JveGOFU8_dNCWo9_YUsKKhfGEFj_ab7A/preview', },
+                { url: 'https://drive.google.com/file/d/1GEzj4xh6mXsX-z_bJ5nNq1zzbRmqh4EM/preview', },
+                { url: 'https://drive.google.com/file/d/1GKaVh7D0H0cw6uyAFQYxGrEpJSLWBEfU/preview',  },
+                { url: 'https://drive.google.com/file/d/134IcjBt0aYOZZ-QX_D9IQVd0E0c5eSyP/preview',},
                 // Adicione mais links aqui se necessário, mantendo o formato.
             ];
 
@@ -321,10 +315,10 @@
                     item.className = 'carousel-item';
                     item.setAttribute('data-video-url', video.url);
 
+                    // MUDANÇA: O elemento title foi removido do innerHTML
                     item.innerHTML = `
-                        <img src="${video.thumb}" alt="${video.title}" class="carousel-item-thumbnail">
+                        
                         <div class="carousel-play-icon"></div>
-                        <div class="carousel-item-title">${video.title}</div>
                     `;
 
                     // Adiciona o evento de clique para mudar o player principal
